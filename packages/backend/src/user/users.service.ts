@@ -6,7 +6,7 @@ import {
 import { Users } from './entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AnalyticsService } from 'src/analytics/analytics.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 import { RegisterDto } from './dto/register.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -159,10 +159,13 @@ export class UsersService {
 
     const reliability =
       await this.analyticsService.calculatePredictorReliability(user.id);
+    const reputationScore =
+      await this.analyticsService.calculateReputationScore(walletAddress);
 
     return {
       ...user,
       predictorReliability: reliability,
+      reputationScore,
     };
   }
 }
