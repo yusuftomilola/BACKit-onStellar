@@ -11,7 +11,9 @@ use soroban_sdk::{
 };
 
 use auth::require_admin;
-use events::{emit_fee_collected, emit_outcome_finalized, emit_outcome_submitted, emit_payout_claimed};
+use events::{
+    emit_fee_collected, emit_outcome_finalized, emit_outcome_submitted, emit_payout_claimed,
+};
 use storage::{InstanceKey, Outcome, SignedOutcome, TempKey};
 use verification::{build_message, verify_signature};
 
@@ -100,9 +102,7 @@ impl OutcomeManager {
         env.storage()
             .instance()
             .set(&InstanceKey::FeeCollector, &fee_collector);
-        env.storage()
-            .instance()
-            .set(&InstanceKey::FeeBps, &fee_bps);
+        env.storage().instance().set(&InstanceKey::FeeBps, &fee_bps);
     }
 
     // ── Admin Controls ─────────────────────────────────────────────────────────

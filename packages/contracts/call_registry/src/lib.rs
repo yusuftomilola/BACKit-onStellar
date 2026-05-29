@@ -136,6 +136,24 @@ impl CallRegistry {
         call
     }
 
+    /// Extend the TTL of a specific call's persistent storage entry.
+    /// Anyone may call this to prevent an active call from being archived.
+    pub fn extend_call_ttl(env: Env, call_id: u64) {
+        let key = storage::DataKey::Call(call_id);
+        if !env.storage().persistent().has(&key) {
+            panic!("Call does not exist");
+        }
+        env.storage().persistent().extend_ttl(
+            &key,
+            storage::PERSISTENT_LIFETIME_THRESHOLD,
+            storage::PERSISTENT_BUMP_AMOUNT,
+        );
+
+        // Also extend the staker index if it exists — callers bump both together
+        // Individual StakerCalls keys are address-specific so those are bumped
+        // on interaction (add_staker_call / get_staker_calls).
+    }
+
     /// Add stake to an existing call
     pub fn stake_on_call(
         env: Env,

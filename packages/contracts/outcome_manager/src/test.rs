@@ -361,14 +361,7 @@ fn test_fee_deducted_from_payout() {
     let (_, registry_id, client) = setup_with_fee(&env, 500);
     let staker = Address::generate(&env);
 
-    client.claim_payout(
-        &registry_id,
-        &1u64,
-        &staker,
-        &100i128,
-        &100i128,
-        &100i128,
-    );
+    client.claim_payout(&registry_id, &1u64, &staker, &100i128, &100i128, &100i128);
     // If no panic, payout was computed and released correctly
 }
 
@@ -380,14 +373,7 @@ fn test_zero_fee_full_payout() {
     let (_, registry_id, client) = setup_with_fee(&env, 0);
     let staker = Address::generate(&env);
 
-    client.claim_payout(
-        &registry_id,
-        &1u64,
-        &staker,
-        &50i128,
-        &100i128,
-        &100i128,
-    );
+    client.claim_payout(&registry_id, &1u64, &staker, &50i128, &100i128, &100i128);
 }
 
 #[test]
@@ -420,14 +406,7 @@ fn test_fee_goes_to_correct_address() {
     let staker = Address::generate(&env);
 
     // Should not panic; MockRegistry records calls but we verify no panic = correct flow
-    client.claim_payout(
-        &registry_id,
-        &1u64,
-        &staker,
-        &100i128,
-        &100i128,
-        &100i128,
-    );
+    client.claim_payout(&registry_id, &1u64, &staker, &100i128, &100i128, &100i128);
     // fee_collector address was set during setup_with_fee; contract uses it internally
     let _ = fee_collector; // referenced to confirm it was set
 }
