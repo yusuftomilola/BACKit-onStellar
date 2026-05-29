@@ -43,7 +43,7 @@ pub fn next_call_id(env: &Env) -> u64 {
     next_id
 }
 
-/// Store a call
+/// Store a call in persistent storage
 pub fn set_call(env: &Env, call: &Call) {
     let key = DataKey::Call(call.id);
     env.storage().persistent().set(&key, call);
@@ -54,6 +54,7 @@ pub fn set_call(env: &Env, call: &Call) {
     );
 }
 
+/// Retrieve a call by ID from persistent storage, refreshing its TTL on access
 pub fn get_call(env: &Env, call_id: u64) -> Option<Call> {
     let key = DataKey::Call(call_id);
     let result: Option<Call> = env.storage().persistent().get(&key);
@@ -67,6 +68,7 @@ pub fn get_call(env: &Env, call_id: u64) -> Option<Call> {
     result
 }
 
+/// Check whether a call exists in persistent storage
 pub fn call_exists(env: &Env, call_id: u64) -> bool {
     env.storage().persistent().has(&DataKey::Call(call_id))
 }
@@ -92,6 +94,7 @@ pub fn add_staker_call(env: &Env, staker: &Address, call_id: u64) {
     );
 }
 
+/// Retrieve all call IDs a staker has participated in, refreshing TTL if non-empty
 pub fn get_staker_calls(env: &Env, staker: &Address) -> soroban_sdk::Vec<u64> {
     let key = DataKey::StakerCalls(staker.clone());
     let result = env
